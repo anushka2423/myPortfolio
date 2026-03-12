@@ -1,7 +1,8 @@
 import { useState, useCallback } from "react";
 import "./styles/Work.css";
 import WorkImage from "./WorkImage";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import { MdArrowBack, MdArrowForward, MdOpenInNew } from "react-icons/md";
+import { FaGithub } from "react-icons/fa";
 
 const projects = [
   {
@@ -9,24 +10,48 @@ const projects = [
     category: "Workflow Automation Platform",
     tools: "Node.js, Express.js, PostgreSQL, Supabase",
     image: "/images/flowgenie.png",
-  },  
+    github: "https://github.com/anushka2423?tab=repositories&q=flow&type=&language=&sort=", 
+    live: "http://flowgenie.live/",
+  },
+  {
+    title: "Leetco Extension",
+    category: "Chrome Extension",
+    tools: "React.js, OpenAI API",
+    image: "/images/leetcode.png",
+    github: "https://github.com/anushka2423/LeetcodeExtension",
+    live: "",
+  },
+  {
+    title: "VSCode Extension",
+    category: "VSCode Extension",
+    tools: "javascript",
+    image: "/images/vscode.png",
+    github: "https://github.com/anushka2423/vs-extension",
+    live: "",
+  },
   {
     title: "CA Cloud Desk", 
     category: "Human Resource Management Systems",
     tools: "React.js, Redux, Ant Design, Workflows",
     image: "/images/caCloudDesk.png",
+    github: "",
+    live: "",
   },
   {
     title: "CPC",
     category: "Project Management",
     tools: "React.js, Redux, Ant Design, Workflows",
     image: "/images/cpc.png",
+    github: "",
+    live: "",
   },
   {
     title: "Accompany Akki",
     category: "Job Portal",
     tools: "Next.js, Ant Design",
     image: "/images/akki.png",
+    github: "",
+    live: "",
   },
 ];
 
@@ -96,7 +121,35 @@ const Work = () => {
                         <h3>0{index + 1}</h3>
                       </div>
                       <div className="carousel-details">
-                        <h4>{project.title}</h4>
+                        <div className="carousel-title-row">
+                          <h4>{project.title}</h4>
+                          <div className="carousel-title-links">
+                            {project.github && (
+                              <a
+                                href={project.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="carousel-link-icon"
+                                aria-label={`${project.title} - GitHub`}
+                                title="View on GitHub"
+                              >
+                                <FaGithub />
+                              </a>
+                            )}
+                            {project.live && (
+                              <a
+                                href={project.live}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="carousel-link-icon"
+                                aria-label={`${project.title} - Live site`}
+                                title="View live"
+                              >
+                                <MdOpenInNew />
+                              </a>
+                            )}
+                          </div>
+                        </div>
                         <p className="carousel-category">
                           {project.category}
                         </p>

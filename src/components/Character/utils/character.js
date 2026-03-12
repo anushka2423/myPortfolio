@@ -24,20 +24,32 @@ const setCharacter = (renderer, scene, camera) => {
               character.traverse((child) => {
                 if (child.isMesh) {
                   const mesh = child;
+                  const isCap = mesh.name && mesh.name.toLowerCase().includes("cap");
 
                   if (mesh.material) {
-                    if (mesh.name === "BODY.SHIRT") {
-                      const newMat = mesh.material.clone();
-                      newMat.color = new THREE.Color("#D4A5A5"); // soft dusty rose
-                      if (newMat.roughness !== undefined) newMat.roughness = 0.72;
-                      if (newMat.metalness !== undefined) newMat.metalness = 0.04;
-                      mesh.material = newMat;
-                    } else if (mesh.name === "Pant") {
-                      const newMat = mesh.material.clone();
-                      newMat.color = new THREE.Color("#2C2426"); // soft charcoal
-                      if (newMat.roughness !== undefined) newMat.roughness = 0.78;
-                      mesh.material = newMat;
-                    }
+                    const newMat = Array.isArray(mesh.material)
+                      ? mesh.material.map((m) => m.clone())
+                      : mesh.material.clone();
+                    const mats = Array.isArray(newMat) ? newMat : [newMat];
+                    mats.forEach((mat) => {
+                      if (isCap) {
+                        // Cap: black base with subtle purple glow (silhouette + halo)
+                        if (mat.color) mat.color.set("#000000");
+                        if (mat.emissive) {
+                          mat.emissive.set("#2d1b4e");
+                          if (mat.emissiveIntensity !== undefined) mat.emissiveIntensity = 0.25;
+                        }
+                        if (mat.roughness !== undefined) mat.roughness = 0.8;
+                        if (mat.metalness !== undefined) mat.metalness = 0.02;
+                      } else {
+                        // Rest: full black silhouette
+                        if (mat.color) mat.color.set("#000000");
+                        if (mat.emissive) mat.emissive.set("#000000");
+                        if (mat.roughness !== undefined) mat.roughness = 0.85;
+                        if (mat.metalness !== undefined) mat.metalness = 0.05;
+                      }
+                    });
+                    mesh.material = Array.isArray(mesh.material) ? mats : mats[0];
                   }
 
                   child.castShadow = true;

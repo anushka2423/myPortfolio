@@ -75,10 +75,37 @@
   gap: 8px;
 }
 
+.carousel-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .carousel-details h4 {
   font-size: 28px;
   font-weight: 500;
   margin: 0;
+}
+
+.carousel-title-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.carousel-link-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #adacac;
+  font-size: 20px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.carousel-link-icon:hover {
+  color: var(--accentColor);
+  transform: scale(1.1);
 }
 
 .carousel-category {

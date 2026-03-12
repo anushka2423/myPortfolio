@@ -95,27 +95,38 @@ const Scene = () => {
       let progress = setProgress((value) => setLoading(value));
       const { loadCharacter } = setCharacter(renderer, scene, camera);
 
-      loadCharacter().then((gltf) => {
-        if (gltf) {
-          const animations = setAnimations(gltf);
-          hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
-          mixer = animations.mixer;
-          characterObj = gltf.scene;
-          setChar(characterObj);
-          scene.add(characterObj);
-          headBone = characterObj.getObjectByName("spine006") || null;
-          screenLight = characterObj.getObjectByName("screenlight") || null;
+      loadCharacter()
+        .then((gltf) => {
+          if (gltf) {
+            const animations = setAnimations(gltf);
+            hoverDivRef.current && animations.hover(gltf, hoverDivRef.current);
+            mixer = animations.mixer;
+            characterObj = gltf.scene;
+            setChar(characterObj);
+            scene.add(characterObj);
+            headBone =
+              characterObj.getObjectByName("spine006") ||
+              characterObj.getObjectByName("Head") ||
+              characterObj.getObjectByName("head") ||
+              null;
+            screenLight = characterObj.getObjectByName("screenlight") || null;
+            progress.loaded().then(() => {
+              setTimeout(() => {
+                light.turnOnLights();
+                animations.startIntro();
+              }, 2500);
+            });
+            window.addEventListener("resize", () =>
+              handleResize(renderer, camera, canvasDiv, characterObj)
+            );
+          }
+        })
+        .catch((err) => {
+          console.error("Character failed to load:", err);
           progress.loaded().then(() => {
-            setTimeout(() => {
-              light.turnOnLights();
-              animations.startIntro();
-            }, 2500);
+            setTimeout(() => light.turnOnLights(), 500);
           });
-          window.addEventListener("resize", () =>
-            handleResize(renderer, camera, canvasDiv, characterObj)
-          );
-        }
-      });
+        });
 
       let mouse = { x: 0, y: 0 },
         interpolation = { x: 0.1, y: 0.2 };
